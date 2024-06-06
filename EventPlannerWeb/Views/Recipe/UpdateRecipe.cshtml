@@ -37,7 +37,8 @@
         }
 
         .card input[type="text"],
-        .card textarea {
+        .card textarea,
+        .card select {
             width: calc(100% - 20px);
             padding: 10px;
             margin-top: 5px;
@@ -101,6 +102,14 @@
             <textarea id="description">@Model.Recipe.Description</textarea>
             <span id="descriptionValidation"></span>
 
+            <label for="category">Категорія:</label>
+            <select id="category" name="category">
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Value">@category.Text</option>
+                }
+            </select>
+
             <!-- Додайте інші поля для решти ваших даних рецепту -->
 
             <!-- Додайте інгредієнти з їх кількістю для редагування -->
@@ -125,6 +134,13 @@
             const calories = document.getElementById("calories").value;
             const cookingTime = document.getElementById("cookingTime").value;
             const description = document.getElementById("description").value;
+            const category = document.getElementById("category").value;
+
+            const ingredients = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Ingredients));
+            const ingredientsAmount = [];
+            for (let i = 0; i < ingredients.length; i++) {
+                ingredientsAmount.push(document.getElementById(`ingredientAmount${i + 1}`).value);
+            }
 
             const data = {
                 Recipe: {
@@ -133,10 +149,11 @@
                     Price: price,
                     Calories: calories,
                     CookingTime: cookingTime,
-                    Description: description
+                    Description: description,
+                    CategoryId: category
                 },
-                IngredientsAmount: [30, 20],
-                Ingredients: ["Морква", "Огірок"]
+                Ingredients: ingredients,
+                IngredientsAmount: ingredientsAmount
             };
 
             try {
@@ -149,10 +166,8 @@
                 });
 
                 if (response.ok) {
-                    // Обробка успішної відповіді
                     alert('Рецепт успішно оновлено!');
                 } else {
-                    // Обробка помилки
                     alert('Помилка при оновленні рецепту');
                 }
             } catch (error) {
@@ -162,7 +177,4 @@
         }
     </script>
 </body>
-
-
 </html>
-

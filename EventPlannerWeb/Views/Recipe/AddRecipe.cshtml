@@ -93,23 +93,32 @@
             <form method="post" asp-action="AddRecipe" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Назва:</label>
-                    <input type="text" id="name" name="Name" class="form-control" required>
+                    <input type="text" id="name" name="Recipe.Name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="calories">Калорійність:</label>
-                    <input type="number" id="calories" name="Calories" class="form-control" required>
+                    <input type="number" id="calories" name="Recipe.Calories" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="cookingTime">Час приготування:</label>
-                    <input type="number" id="cookingTime" name="CookingTime" class="form-control" required>
+                    <input type="number" id="cookingTime" name="Recipe.CookingTime" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="price">Вартість:</label>
-                    <input type="number" id="price" name="Price" class="form-control" required>
+                    <input type="number" id="price" name="Recipe.Price" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Опис приготування:</label>
-                    <textarea id="description" name="Description" class="form-control" required></textarea>
+                    <textarea id="description" name="Recipe.Description" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="category">Категорія:</label>
+                    <select id="category" name="Recipe.CategoryId" class="form-control" required>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="ingredients">Інгредієнти:</label>
@@ -129,12 +138,14 @@
     </div>
     <script>
         async function addRecipe() {
-            //const recipeId = document.getElementById("recipeId").value;
             const name = document.getElementById("name").value;
             const price = document.getElementById("price").value;
             const calories = document.getElementById("calories").value;
             const cookingTime = document.getElementById("cookingTime").value;
             const description = document.getElementById("description").value;
+            const categoryId = document.getElementById("category").value;
+
+            const selectedIngredients = Array.from(document.getElementById("ingredients").selectedOptions).map(option => option.value);
 
             const data = {
                 Recipe: {
@@ -142,10 +153,11 @@
                     Price: price,
                     Calories: calories,
                     CookingTime: cookingTime,
-                    Description: description
+                    Description: description,
+                    CategoryId: categoryId
                 },
-                IngredientsAmount: [30],
-                Ingredients: ["Морква"]
+                IngredientsAmount: [30],  // Adjust this according to your needs
+                Ingredients: selectedIngredients
             };
 
             try {
@@ -158,11 +170,9 @@
                 });
 
                 if (response.ok) {
-                    // Обробка успішної відповіді
-                    alert('Рецепт успішно оновлено!');
+                    alert('Рецепт успішно додано!');
                 } else {
-                    // Обробка помилки
-                    alert('Помилка при оновленні рецепту');
+                    alert('Помилка при додаванні рецепту');
                 }
             } catch (error) {
                 console.error('Виникла помилка:', error);

@@ -78,10 +78,17 @@ namespace EventPlannerWeb.Controllers
                 .Select(i => new SelectListItem { Value = i.IngredientId.ToString(), Text = i.Name })
                 .ToListAsync();
 
+            var categories = await _context.Categories
+                .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name })
+                .ToListAsync();
+
             ViewBag.Ingredients = ingredients;
+            ViewBag.Categories = categories;
 
             return View("AddRecipe");
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult> AddRecipe(RecipeDTO recipeDTO)
@@ -111,6 +118,7 @@ namespace EventPlannerWeb.Controllers
             return BadRequest(message);
         }
 
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteRecipe(int id)
         {
@@ -139,6 +147,12 @@ namespace EventPlannerWeb.Controllers
 
             var ingredients = await ingredientsQuery.ToListAsync();
 
+            var categories = await _context.Categories
+                .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name })
+                .ToListAsync();
+
+            ViewBag.Categories = categories;
+
             var model = new RecipeDTO
             {
                 Recipe = recipe,
@@ -148,6 +162,7 @@ namespace EventPlannerWeb.Controllers
 
             return View("UpdateRecipe", model);
         }
+
 
         [HttpPut]
         public async Task<ActionResult> UpdateRecipe(RecipeDTO recipeDTO)
@@ -183,6 +198,7 @@ namespace EventPlannerWeb.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
 
         private bool RecipeExists(int id)
         {

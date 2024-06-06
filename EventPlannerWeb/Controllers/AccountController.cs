@@ -71,7 +71,7 @@ namespace Library_kursova.Controllers
             if (!result)
                 return Unauthorized("Invalid password");
 
-            ViewBag.ShowLoginButton = false;
+            
 
             return new UserDTO
             {

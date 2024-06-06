@@ -69,6 +69,7 @@
             <p class="calories">Калорії: @Model.Calories.ToString() ккал</p>
             <p class="cooking time">Час приготування: @Model.CookingTime.ToString() хв</p>
             <p class="description">Опис: @Model.Description</p>
+            <p class="category">Категорія: @Model.Category?.Name</p>
             <a href="@Url.Action("RecipeList", "Recipe")" class="back-to-list">Назад до списку</a>
         </div>
     </div>

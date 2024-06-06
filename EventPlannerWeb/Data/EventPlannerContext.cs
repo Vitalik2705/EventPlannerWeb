@@ -42,6 +42,11 @@ namespace EventPlannerWeb.Data
             }
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AppRole>().HasMany(u => u.UserRoles).WithOne(u => u.Role).HasForeignKey(u => u.RoleId).IsRequired();
+
+            modelBuilder.Entity<Recipe>()
+              .HasOne(r => r.Category)
+              .WithMany(c => c.Recipes)
+              .HasForeignKey(r => r.CategoryId);
         }
 
         public DbSet<User> User { get; set; }
@@ -59,5 +64,7 @@ namespace EventPlannerWeb.Data
         public DbSet<EventGuest> EventGuest { get; set; }
 
         public DbSet<EventRecipe> EventRecipe { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
     }
 }
